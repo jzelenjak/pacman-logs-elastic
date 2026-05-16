@@ -1,0 +1,13 @@
+[2026-05-14T07:30:01+0300] [ALPM] installed python (3.14.5-1)
+[2026-05-14T07:30:02+0300] [ALPM] reinstalled go (2:1.26.3-1)
+[2026-05-14T07:30:03+0300] [ALPM] removed nodejs (26.1.0-1)
+[2026-05-14T07:30:04+0300] [ALPM] upgraded curl (8.20.0-5 -> 8.20.0-6)
+[2026-05-14T07:30:05+0300] [ALPM] downgraded wget (1.25.0-4 -> 1.25.0-3)
+[2026-05-14T07:30:06+0300] [ALPM] transaction started
+[2026-05-14T07:30:07+0300] [ALPM] transaction completed
+[2026-05-14T07:30:08+0300] [ALPM] transaction failed
+[2026-05-14T07:30:09+0300] [ALPM] transaction interrupted
+[2026-05-14T07:30:10+0300] [ALPM] running '90-mkinitcpio-install.hook'...
+[2026-05-14T07:30:11+0300] [ALPM] warning: /etc/mkinitcpio.conf installed as /etc/mkinitcpio.conf.pacnew
+[2026-05-14T07:30:12+0300] [ALPM] debug: running ldconfig
+[2026-05-14T07:30:13+0300] [ALPM] error: unresolvable package conflicts detected

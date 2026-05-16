@@ -108,12 +108,18 @@ services:
     command: /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash-pacman.conf
     volumes:
       - ./pipeline/:/usr/share/logstash/pipeline/:ro
+      # NOTE: Use the actual pacman.log file
       - /var/log/pacman.log:/usr/share/logstash/ingest-data/pacman.log:ro
+      # NOTE: Use the provided example logs
+      #- ./example-logs/:/usr/share/logstash/ingest-data:ro
+      # NOTE: Use the provided test logs
+      #$- ./test-logs/:/usr/share/logstash/ingest-data:ro
       - ca_certs:/usr/share/logstash/config/certs/ca:ro
     environment:
       ES_HOSTS: "https://es:9200"
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       SSL_CERTIFICATE_AUTHORITIES: /usr/share/logstash/config/certs/ca/ca.crt
+      # NOTE: Specify the data stream namespace (e.g. "example", "test", "default" etc.)
       DS_NAMESPACE: default
     networks:
       - internal

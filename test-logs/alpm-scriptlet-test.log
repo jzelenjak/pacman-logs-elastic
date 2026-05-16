@@ -1,0 +1,17 @@
+[2026-05-14T07:40:01+0300] [ALPM-SCRIPTLET] ==> dkms install --no-depmod nvidia/595.71.05 -k 7.0.6-hardened1-1-hardened
+[2026-05-14T07:40:02+0300] [ALPM-SCRIPTLET] ==> depmod 7.0.6-hardened1-1-hardened
+[2026-05-14T07:40:03+0300] [ALPM-SCRIPTLET]   -> -k /boot/vmlinuz-linux-hardened -g /boot/initramfs-linux-hardened.img
+[2026-05-14T07:40:04+0300] [ALPM-SCRIPTLET]   -> Running build hook: [base]
+[2026-05-14T07:40:05+0300] [ALPM-SCRIPTLET] ==> Building image from preset: /etc/mkinitcpio.d/linux-hardened.preset: 'default'
+[2026-05-14T07:40:06+0300] [ALPM-SCRIPTLET] ==> Using default configuration file: '/etc/mkinitcpio.conf'
+[2026-05-14T07:40:07+0300] [ALPM-SCRIPTLET] ==> Starting build: '7.0.6-hardened1-1-hardened'
+[2026-05-14T07:40:08+0300] [ALPM-SCRIPTLET] ==> Generating module dependencies
+[2026-05-14T07:40:09+0300] [ALPM-SCRIPTLET] ==> Creating zstd-compressed initcpio image: '/boot/initramfs-linux-hardened.img'
+[2026-05-14T07:40:10+0300] [ALPM-SCRIPTLET] ==> Image generation successful
+[2026-05-14T07:40:11+0300] [ALPM-SCRIPTLET] Created symlink /etc/systemd/user/sockets.target.wants/pipewire.socket → /usr/lib/systemd/user/pipewire.socket.
+[2026-05-14T07:40:12+0300] [ALPM-SCRIPTLET] Creating group 'dbus' with GID 81.
+[2026-05-14T07:40:13+0300] [ALPM-SCRIPTLET] Creating user 'dbus' (System Message Bus) with UID 81 and GID 81.
+[2026-05-14T07:40:14+0300] [ALPM-SCRIPTLET]   Skipped: Running in chroot.
+[2026-05-14T07:40:15+0300] [ALPM-SCRIPTLET] perl: warning: Falling back to the standard locale ("C").
+[2026-05-14T07:40:16+0300] [ALPM-SCRIPTLET] ==> WARNING: Possibly missing firmware for module: 'xhci_pci'
+[2026-05-14T07:40:17+0300] [ALPM-SCRIPTLET] ==> ERROR: Missing 6.12.4-arch1-1 kernel headers for module vboxhost/7.1.4_OSE.

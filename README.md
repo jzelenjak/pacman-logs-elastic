@@ -18,6 +18,19 @@ docker compose pull
 ```
 Make sure to set the passwords and Kibana encryption keys in the `.env` file (use `.env.example` as a reference).
 
+The `compose.yaml` file already bind mounts the `/var/log/pacman.log` file to the Logstash ingest data directory.
+Feel free to change the file and/or path depending on your setup.
+
+
+## Example logs
+
+In the [example-logs](./example-logs/) directory, you can find some old logs which you can check to get the idea of Pacman logs. 
+You can also use these logs if you do not have a `/var/log/pacman.log` file and you want to try out some queries and visualizations in Kibana.
+To do this, bind mount the `example-logs` directory to `/usr/share/logstash/ingest-data` in the `compose.yaml` file.
+
+In addition, [test-logs](./test-logs/) directory contains some logs which can be used for testing the Logstash pipeline.
+These files should only be used during development (e.g. using only the stdout output plugin) and contain various kinds of log lines (with hardcoded timestamps).
+
 
 ## Usage
 

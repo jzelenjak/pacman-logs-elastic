@@ -1,0 +1,11 @@
+[2023-09-17T10:47:46+0200] [PACMAN] Running 'pacman -S nvidia-dkms'
+[2023-09-17T10:47:55+0200] [ALPM] transaction started
+[2023-09-17T10:47:55+0200] [ALPM] installed dkms (3.0.11-1)
+[2023-09-17T10:47:55+0200] [ALPM] installed nvidia-dkms (535.104.05-1)
+[2023-09-17T10:47:55+0200] [ALPM] transaction completed
+[2023-09-17T10:47:55+0200] [ALPM] running '30-systemd-update.hook'...
+[2023-09-17T10:47:55+0200] [ALPM] running '70-dkms-install.hook'...
+[2023-09-17T10:47:55+0200] [ALPM-SCRIPTLET] ==> dkms install --no-depmod nvidia/535.104.05 -k 6.1.53-1-lts
+[2023-09-17T10:48:31+0200] [ALPM-SCRIPTLET] ==> dkms install --no-depmod nvidia/535.104.05 -k 6.4.16-hardened1-1-hardened
+[2023-09-17T10:49:07+0200] [ALPM-SCRIPTLET] ==> depmod 6.1.53-1-lts
+[2023-09-17T10:49:08+0200] [ALPM-SCRIPTLET] ==> depmod 6.4.16-hardened1-1-hardened
