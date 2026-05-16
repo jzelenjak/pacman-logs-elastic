@@ -1,0 +1,6 @@
+# Public CA certificate for verification
+ca.crt
+*ca*.crt
+
+# Environment variables
+.env

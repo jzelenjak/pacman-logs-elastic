@@ -1,0 +1,28 @@
+# Elasticsearch configuration file.
+# For more information, see the documentation:
+# - https://www.elastic.co/docs/reference/elasticsearch/configuration-reference
+# - https://www.elastic.co/docs/deploy-manage/deploy/self-managed/configure-elasticsearch
+# - https://www.elastic.co/docs/deploy-manage/tools/snapshot-and-restore/shared-file-system-repository
+# - https://github.com/elastic/elasticsearch/blob/main/distribution/src/config/elasticsearch.yml
+
+network.host: 0.0.0.0
+node.name: ${NODE_NAME}
+cluster.name: ${CLUSTER_NAME}
+discovery.type: single-node
+bootstrap.memory_lock: ${MEMORY_LOCK:true}
+path.repo: ["${HOME}/snapshots/"]
+
+xpack.security.enabled: true
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.key: ${HOME}/config/certs/${NODE_NAME}/${NODE_NAME}.key
+xpack.security.http.ssl.certificate: ${HOME}/config/certs/${NODE_NAME}/${NODE_NAME}.crt
+xpack.security.http.ssl.certificate_authorities: ${HOME}/config/certs/ca/ca.crt
+xpack.security.http.ssl.supported_protocols: ["TLSv1.3", "TLSv1.2"]
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.key: ${HOME}/config/certs/${NODE_NAME}/${NODE_NAME}.key
+xpack.security.transport.ssl.certificate: ${HOME}/config/certs/${NODE_NAME}/${NODE_NAME}.crt
+xpack.security.transport.ssl.certificate_authorities: ${HOME}/config/certs/ca/ca.crt
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.supported_protocols: ["TLSv1.3", "TLSv1.2"]
+xpack.license.self_generated.type: ${LICENSE}
+xpack.ml.use_auto_machine_memory_percent: true

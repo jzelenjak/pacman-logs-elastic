@@ -1,0 +1,15 @@
+# Instances for which elasticsearch-certutil will generate a certificate.
+
+instances:
+  - name: es
+    dns:
+      - es
+      - localhost
+    ip:
+      - 127.0.0.1
+  - name: kibana
+    dns:
+      - kibana
+      - localhost
+    ip:
+      - 127.0.0.1

@@ -1,0 +1,136 @@
+# Minimal single-node Elasticsearch setup with Kibana and Logstash
+# For additional information, see the documentation:
+# - https://www.elastic.co/docs/deploy-manage/deploy/self-managed/install-elasticsearch-docker-compose
+# - https://github.com/elastic/elasticsearch/tree/main/docs/reference/setup/install/docker
+
+services:
+  setup-certs:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    restart: no
+    user: "0"
+    command: /usr/share/elasticsearch/docker_setup_certs.sh
+    volumes:
+      - ./setup/docker_setup_certs.sh:/usr/share/elasticsearch/docker_setup_certs.sh:ro
+      - ./setup/instances.yml:/usr/share/elasticsearch/config/certs/instances.yml
+      - certs:/usr/share/elasticsearch/config/certs
+      - ca_certs:/usr/share/elasticsearch/config/ca_certs
+      - es_certs:/usr/share/elasticsearch/config/certs/es
+      - kibana_certs:/usr/share/elasticsearch/config/certs/kibana
+    networks:
+      - internal
+
+  setup-es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    restart: no
+    user: "0"
+    command: /usr/share/elasticsearch/docker_setup_es.sh
+    volumes:
+      - ./setup/docker_setup_es.sh:/usr/share/elasticsearch/docker_setup_es.sh:ro
+      - ca_certs:/usr/share/elasticsearch/config/certs/ca:ro
+      - es_snapshots:/usr/share/elasticsearch/snapshots
+    environment:
+      ES_HOST: "https://es:9200"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      KIBANA_PASSWORD: ${KIBANA_PASSWORD}
+    networks:
+      - internal
+    depends_on:
+      es:
+        condition: service_healthy
+
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+    restart: unless-stopped
+    volumes:
+      - ./config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ca_certs:/usr/share/elasticsearch/config/certs/ca:ro
+      - es_certs:/usr/share/elasticsearch/config/certs/es:ro
+      - es_data:/usr/share/elasticsearch/data
+      - es_snapshots:/usr/share/elasticsearch/snapshots
+    environment:
+      NODE_NAME: es
+      CLUSTER_NAME: ${ES_CLUSTER_NAME}
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      LICENSE: ${LICENSE}
+      # NOTE: Set to false if using Docker in rootless mode
+      #MEMORY_LOCK: false
+    ports:
+      - ${ES_PORT}:9200
+    networks:
+      - internal
+    mem_limit: ${MEM_LIMIT}
+    # NOTE: Comment out if using Docker in rootless mode (container cannot have unlimited locked-in-memory address space)
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'"]
+      interval: 10s
+      timeout: 30s
+      retries: 120
+    depends_on:
+      setup-certs:
+        condition: service_completed_successfully
+    labels:
+      co.elastic.logs/module: elasticsearch
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    restart: unless-stopped
+    volumes:
+      - ./config/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - ca_certs:/usr/share/kibana/config/certs/ca:ro
+      - kibana_certs:/usr/share/kibana/config/certs/kibana:ro
+      - kibana_data:/usr/share/kibana/data
+    environment:
+      ES_HOSTS: "https://es:9200"
+      SERVER_NAME: kibana
+      KIBANA_PASSWORD: ${KIBANA_PASSWORD}
+      ENCRYPTED_SAVED_OBJECTS_ENCRYPTION_KEY: ${KIBANA_ENCRYPTED_SAVED_OBJECTS_ENCRYPTION_KEY}
+      REPORTING_ENCRYPTION_KEY: ${KIBANA_REPORTING_ENCRYPTION_KEY}
+      SECURITY_ENCRYPTION_KEY: ${KIBANA_SECURITY_ENCRYPTION_KEY}
+    ports:
+      - ${KIBANA_PORT}:5601
+    networks:
+      - internal
+    depends_on:
+      es:
+        condition: service_healthy
+      setup-es:
+        condition: service_completed_successfully
+    labels:
+      co.elastic.logs/module: kibana
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    # NOTE: To simply test the pipeline configuration and exit, add --config.test_and_exit
+    command: /usr/share/logstash/bin/logstash -f /usr/share/logstash/pipeline/logstash-pacman.conf
+    volumes:
+      - ./pipeline/:/usr/share/logstash/pipeline/:ro
+      - /var/log/pacman.log:/usr/share/logstash/ingest-data/pacman.log:ro
+      - ca_certs:/usr/share/logstash/config/certs/ca:ro
+    environment:
+      ES_HOSTS: "https://es:9200"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      SSL_CERTIFICATE_AUTHORITIES: /usr/share/logstash/config/certs/ca/ca.crt
+      DS_NAMESPACE: default
+    networks:
+      - internal
+    depends_on:
+      es:
+        condition: service_healthy
+    labels:
+      co.elastic.logs/module: logstash
+
+volumes:
+  certs:
+  ca_certs:
+  es_certs:
+  es_data:
+  es_snapshots:
+  kibana_certs:
+  kibana_data:
+
+networks:
+  internal:
