@@ -22,6 +22,15 @@ The `compose.yaml` file already bind mounts the `/var/log/pacman.log` file to th
 Feel free to change the file and/or path depending on your setup.
 
 
+## Elastic Common Schema
+
+The [ECS_MAPPING.md](./ECS_MAPPING.md) file lists the mappings for different types of Pacman log lines to [Elastic Common Schema (ECS)](https://www.elastic.co/docs/reference/ecs).
+We tried to find a balance between ECS-compliancy, semantics, and consistency.
+
+Note that this mapping is not exhaustive and is based on the Pacman log lines that we have encountered (with the corresponding format).
+It may be updated in the future if we encounter other types of log lines.
+
+
 ## Example logs
 
 In the [example-logs](./example-logs/) directory, you can find some old logs which you can check to get the idea of Pacman logs. 
