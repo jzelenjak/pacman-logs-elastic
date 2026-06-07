@@ -15,3 +15,4 @@
 [2026-05-14T07:40:15+0300] [ALPM-SCRIPTLET] perl: warning: Falling back to the standard locale ("C").
 [2026-05-14T07:40:16+0300] [ALPM-SCRIPTLET] ==> WARNING: Possibly missing firmware for module: 'xhci_pci'
 [2026-05-14T07:40:17+0300] [ALPM-SCRIPTLET] ==> ERROR: Missing 6.12.4-arch1-1 kernel headers for module vboxhost/7.1.4_OSE.
+[2026-05-14T07:40:18+0300] [ALPM-SCRIPTLET] Created symlink '/etc/systemd/user/sockets.target.wants/speech-dispatcher.socket' → '/usr/lib/systemd/user/speech-dispatcher.socket'.

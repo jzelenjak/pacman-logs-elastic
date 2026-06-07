@@ -11,7 +11,7 @@ services:
     command: /usr/share/elasticsearch/docker_setup_certs.sh
     volumes:
       - ./setup/docker_setup_certs.sh:/usr/share/elasticsearch/docker_setup_certs.sh:ro
-      - ./setup/instances.yml:/usr/share/elasticsearch/config/certs/instances.yml
+      - ./setup/instances.yml:/usr/share/elasticsearch/config/certs/instances.yml:ro
       - certs:/usr/share/elasticsearch/config/certs
       - ca_certs:/usr/share/elasticsearch/config/ca_certs
       - es_certs:/usr/share/elasticsearch/config/certs/es
@@ -38,6 +38,15 @@ services:
       es:
         condition: service_healthy
 
+  # NOTE: This is a simple service that is used to generate Kibana encryption keys
+  # It is intended to be a one-shot container and run independently of the main stack
+  generate-kibana-keys:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    command: /usr/share/kibana/bin/kibana-encryption-keys generate
+    network_mode: none
+    profiles:
+      - kibana-keys
+
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     restart: unless-stopped
@@ -53,7 +62,7 @@ services:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
       LICENSE: ${LICENSE}
       # NOTE: Set to false if using Docker in rootless mode
-      #MEMORY_LOCK: false
+      MEMORY_LOCK: true
     ports:
       - ${ES_PORT}:9200
     networks:
@@ -113,7 +122,7 @@ services:
       # NOTE: Use the provided example logs
       #- ./example-logs/:/usr/share/logstash/ingest-data:ro
       # NOTE: Use the provided test logs
-      #$- ./test-logs/:/usr/share/logstash/ingest-data:ro
+      #- ./test-logs/:/usr/share/logstash/ingest-data:ro
       - ca_certs:/usr/share/logstash/config/certs/ca:ro
     environment:
       ES_HOSTS: "https://es:9200"

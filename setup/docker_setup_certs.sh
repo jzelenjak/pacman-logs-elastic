@@ -26,7 +26,6 @@ if [ ! -f config/certs/certs.zip ]; then
 fi
 
 echo "Setting file permissions"
-chown -R root:root config/certs
 find config/certs -type d -exec chmod 750 \{\} \;
 find config/certs -type f -exec chmod 640 \{\} \;
 
